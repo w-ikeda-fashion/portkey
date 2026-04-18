@@ -1,0 +1,149 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import CopyButton from "./CopyButton";
+
+const CATEGORY_LABEL: Record<string, string> = {
+  webapp: "Webアプリ",
+  business: "業務効率化",
+};
+
+export default async function PublicProfilePage({ params }: { params: { username: string } }) {
+  const supabase = await createClient();
+
+  const { data: user } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", params.username)
+    .single();
+
+  if (!user) notFound();
+
+  const { data: achievements } = await supabase
+    .from("achievements")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("is_public", true)
+    .order("created_at", { ascending: false });
+
+  const pageUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/${params.username}`;
+
+  return (
+    <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+      <div className="max-w-3xl mx-auto px-6 py-12">
+        {/* URLコピー */}
+        <div className="flex justify-end mb-6">
+          <CopyButton url={pageUrl} />
+        </div>
+        {/* プロフィール */}
+        <div className="flex items-start gap-6 mb-10">
+          {user.avatar_url ? (
+            <img src={user.avatar_url} alt={user.name} className="w-16 h-16 rounded-full shrink-0 object-cover" />
+          ) : (
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
+              style={{ background: "var(--accent)33", color: "var(--accent)" }}
+            >
+              {(user.name ?? user.username)[0]?.toUpperCase()}
+            </div>
+          )}
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold mb-1">{user.name ?? user.username}</h1>
+            <p className="text-sm mb-3" style={{ color: "var(--muted)" }}>@{user.username}</p>
+            {user.bio && <p className="text-sm mb-4">{user.bio}</p>}
+
+            {user.ai_tools?.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2">
+                {(user.ai_tools as string[]).map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ background: "var(--accent)22", color: "var(--accent)" }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+            {user.domains?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {(user.domains as string[]).map((d) => (
+                  <span
+                    key={d}
+                    className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ background: "#0f4c8133", color: "#93c5fd" }}
+                  >
+                    {d}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 成果物 */}
+        <h2 className="font-semibold text-lg mb-4">AI活用実績</h2>
+        {!achievements || achievements.length === 0 ? (
+          <p className="text-sm" style={{ color: "var(--muted)" }}>まだ公開されている実績はありません。</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {achievements.map((a) => (
+              <div
+                key={a.id}
+                className="p-5 rounded-lg border"
+                style={{ background: "var(--card)", borderColor: "var(--border)" }}
+              >
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full border"
+                    style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+                  >
+                    {CATEGORY_LABEL[a.category] ?? a.category}
+                  </span>
+                  {a.url && (
+                    <a
+                      href={a.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs shrink-0"
+                      style={{ color: "var(--accent)" }}
+                    >
+                      リンク →
+                    </a>
+                  )}
+                </div>
+                <h3 className="font-semibold mb-1">{a.title}</h3>
+                <p className="text-sm mb-3" style={{ color: "var(--muted)" }}>{a.description}</p>
+                <div className="flex gap-1.5 flex-wrap mb-3">
+                  {(a.ai_tools as string[]).map((t) => (
+                    <span
+                      key={t}
+                      className="text-xs px-2 py-0.5 rounded-full"
+                      style={{ background: "var(--accent)22", color: "var(--accent)" }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                {a.outcome && (
+                  <p className="text-xs border-t pt-3" style={{ borderColor: "var(--border)", color: "var(--muted)" }}>
+                    ✓ {a.outcome}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* フッター */}
+        <div className="mt-12 pt-6 border-t text-center" style={{ borderColor: "var(--border)" }}>
+          <p className="text-xs" style={{ color: "var(--muted)" }}>
+            このページは{" "}
+            <Link href="/" style={{ color: "var(--accent)" }}>Portkey</Link>
+            {" "}で作られています。あなたもAI活用実績を記録しませんか？
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
