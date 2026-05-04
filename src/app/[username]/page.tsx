@@ -1,20 +1,63 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import CopyButton from "./CopyButton";
+import { type Metadata } from "next";
+import ShareButtons from "./ShareButtons";
 
 const CATEGORY_LABEL: Record<string, string> = {
   webapp: "Webアプリ",
   business: "業務効率化",
 };
 
-export default async function PublicProfilePage({ params }: { params: { username: string } }) {
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL && process.env.NEXT_PUBLIC_APP_URL !== "http://localhost:3000"
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : "https://portkey-app.vercel.app";
+
+type Props = { params: Promise<{ username: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username } = await params;
+  const supabase = await createClient();
+  const { data: user } = await supabase
+    .from("users")
+    .select("name, bio, ai_tools")
+    .eq("username", username)
+    .single();
+
+  if (!user) return { title: "Portkey" };
+
+  const name = user.name ?? username;
+  const tools: string[] = user.ai_tools ?? [];
+  const toolsText = tools.slice(0, 3).join("・");
+  const pageUrl = `${APP_URL}/${username}`;
+
+  return {
+    title: `${name} — AI活用実績 | Portkey`,
+    description: user.bio ?? `${name}のAI活用実績ポートフォリオ。使用ツール：${toolsText}`,
+    openGraph: {
+      title: `${name} のAI活用実績`,
+      description: user.bio ?? `使用ツール：${toolsText}`,
+      url: pageUrl,
+      siteName: "Portkey",
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${name} のAI活用実績 | Portkey`,
+      description: user.bio ?? `使用ツール：${toolsText}`,
+    },
+  };
+}
+
+export default async function PublicProfilePage({ params }: Props) {
+  const { username } = await params;
   const supabase = await createClient();
 
   const { data: user } = await supabase
     .from("users")
     .select("*")
-    .eq("username", params.username)
+    .eq("username", username)
     .single();
 
   if (!user) notFound();
@@ -26,30 +69,36 @@ export default async function PublicProfilePage({ params }: { params: { username
     .eq("is_public", true)
     .order("created_at", { ascending: false });
 
-  const pageUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/${params.username}`;
+  const pageUrl = `${APP_URL}/${username}`;
+  const displayName = user.name ?? username;
 
   return (
     <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
       <div className="max-w-3xl mx-auto px-6 py-12">
-        {/* URLコピー */}
-        <div className="flex justify-end mb-6">
-          <CopyButton url={pageUrl} />
+
+        {/* シェアバー — #31 #42 */}
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/" className="text-sm font-bold tracking-tight" style={{ color: "var(--accent)" }}>
+            Portkey
+          </Link>
+          <ShareButtons url={pageUrl} name={displayName} />
         </div>
+
         {/* プロフィール */}
         <div className="flex items-start gap-6 mb-10">
           {user.avatar_url ? (
-            <img src={user.avatar_url} alt={user.name} className="w-16 h-16 rounded-full shrink-0 object-cover" />
+            <img src={user.avatar_url} alt={displayName} className="w-16 h-16 rounded-full shrink-0 object-cover" />
           ) : (
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
               style={{ background: "var(--accent)33", color: "var(--accent)" }}
             >
-              {(user.name ?? user.username)[0]?.toUpperCase()}
+              {displayName[0]?.toUpperCase()}
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-2xl font-bold mb-1">{user.name ?? user.username}</h1>
-            <p className="text-sm mb-3" style={{ color: "var(--muted)" }}>@{user.username}</p>
+            <h1 className="text-2xl font-bold mb-1">{displayName}</h1>
+            <p className="text-sm mb-3" style={{ color: "var(--muted)" }}>@{username}</p>
             {user.bio && <p className="text-sm mb-4">{user.bio}</p>}
 
             {user.ai_tools?.length > 0 && (
@@ -135,7 +184,7 @@ export default async function PublicProfilePage({ params }: { params: { username
           </div>
         )}
 
-        {/* Powered by Portkey バッジ — #41 */}
+        {/* Powered by Portkey バッジ */}
         <div className="mt-12 pt-8 border-t flex flex-col items-center gap-3" style={{ borderColor: "var(--border)" }}>
           <Link
             href="/"

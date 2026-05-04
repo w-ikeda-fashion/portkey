@@ -68,14 +68,28 @@ export default async function DashboardPage({
             </p>
           </div>
           {portfolioUrl && (
-            <Link
-              href={`/${username}`}
-              target="_blank"
-              className="text-xs px-3 py-1.5 rounded-md border transition-colors"
-              style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
-            >
-              公開ページを見る →
-            </Link>
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI活用実績ポートフォリオを公開中！\n${portfolioUrl}\n#Portkey #AI活用`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border transition-opacity hover:opacity-70"
+                style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.626L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                シェア
+              </a>
+              <Link
+                href={`/${username}`}
+                target="_blank"
+                className="text-xs px-3 py-1.5 rounded-md border transition-colors"
+                style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
+              >
+                公開ページを見る →
+              </Link>
+            </div>
           )}
         </div>
       )}
