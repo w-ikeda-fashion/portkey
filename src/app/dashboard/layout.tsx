@@ -24,6 +24,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <Link href="/dashboard" className="transition-colors hover:opacity-80">
             ダッシュボード
           </Link>
+          <Link href="/dashboard/report" className="transition-colors hover:opacity-80">
+            レポート
+          </Link>
+          <Link href="/dashboard/insights" className="transition-colors hover:opacity-80">
+            ツール分析
+          </Link>
           <Link href="/dashboard/profile" className="transition-colors hover:opacity-80">
             プロフィール
           </Link>
