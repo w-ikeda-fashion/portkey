@@ -135,12 +135,25 @@ export default async function PublicProfilePage({ params }: { params: { username
           </div>
         )}
 
-        {/* フッター */}
-        <div className="mt-12 pt-6 border-t text-center" style={{ borderColor: "var(--border)" }}>
+        {/* Powered by Portkey バッジ — #41 */}
+        <div className="mt-12 pt-8 border-t flex flex-col items-center gap-3" style={{ borderColor: "var(--border)" }}>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-medium transition-opacity hover:opacity-80"
+            style={{ borderColor: "var(--border)", color: "var(--muted)", background: "var(--card)" }}
+          >
+            <span
+              className="w-4 h-4 rounded-sm flex items-center justify-center text-[10px] font-bold"
+              style={{ background: "var(--accent)", color: "#fff" }}
+            >
+              P
+            </span>
+            Powered by Portkey
+          </Link>
           <p className="text-xs" style={{ color: "var(--muted)" }}>
-            このページは{" "}
-            <Link href="/" style={{ color: "var(--accent)" }}>Portkey</Link>
-            {" "}で作られています。あなたもAI活用実績を記録しませんか？
+            あなたもAI活用実績を記録して、採用で証明しませんか？
+            {" "}
+            <Link href="/auth" style={{ color: "var(--accent)" }}>無料で始める →</Link>
           </p>
         </div>
       </div>
