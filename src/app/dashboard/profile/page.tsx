@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { profileSchema } from "@/lib/schemas";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 const DOMAINS = ["エンジニアリング", "デザイン", "マーケティング", "営業", "人事", "経営企画", "ライティング", "データ分析", "カスタマーサポート", "法務"];
@@ -49,6 +50,18 @@ export default function ProfilePage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    const result = profileSchema.safeParse({
+      name,
+      username,
+      bio,
+      ai_tools: selectedTools,
+      domains: selectedDomains,
+    });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
+
     setSaving(true);
     setError("");
 
@@ -58,7 +71,7 @@ export default function ProfilePage() {
 
     const { error } = await supabase
       .from("users")
-      .update({ name, username, bio, ai_tools: selectedTools, domains: selectedDomains })
+      .update(result.data)
       .eq("id", user.id);
 
     if (error) {

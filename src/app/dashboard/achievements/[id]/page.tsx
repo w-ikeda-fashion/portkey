@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import { achievementSchema } from "@/lib/schemas";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 
@@ -54,8 +55,19 @@ export default function EditAchievementPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!title.trim()) { setError("タイトルは必須です"); return; }
-    if (selectedTools.length === 0) { setError("AIツールを1つ以上選んでください"); return; }
+    const result = achievementSchema.safeParse({
+      title: title.trim(),
+      description: description.trim(),
+      category,
+      ai_tools: selectedTools,
+      outcome: outcome.trim(),
+      url: url.trim(),
+      is_public: isPublic,
+    });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      return;
+    }
 
     setSaving(true);
     setError("");
@@ -63,15 +75,7 @@ export default function EditAchievementPage() {
     const supabase = createClient();
     const { error } = await supabase
       .from("achievements")
-      .update({
-        title: title.trim(),
-        description: description.trim(),
-        category,
-        ai_tools: selectedTools,
-        outcome: outcome.trim(),
-        url: url.trim(),
-        is_public: isPublic,
-      })
+      .update(result.data)
       .eq("id", id);
 
     if (error) {
