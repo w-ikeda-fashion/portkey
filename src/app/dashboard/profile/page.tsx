@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { profileSchema } from "@/lib/schemas";
+import { toUserMessage } from "@/lib/errors";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 const DOMAINS = ["エンジニアリング", "デザイン", "マーケティング", "営業", "人事", "経営企画", "ライティング", "データ分析", "カスタマーサポート", "法務"];
@@ -75,7 +76,7 @@ export default function ProfilePage() {
       .eq("id", user.id);
 
     if (error) {
-      setError(error.message.includes("unique") ? "このユーザーIDはすでに使われています" : error.message);
+      setError(toUserMessage(error));
       setSaving(false);
     } else {
       router.push("/dashboard");

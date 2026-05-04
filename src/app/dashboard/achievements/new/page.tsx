@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { achievementSchema } from "@/lib/schemas";
+import { toUserMessage } from "@/lib/errors";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 
@@ -63,7 +64,7 @@ export default function NewAchievementPage() {
     });
 
     if (error) {
-      setError(error.message);
+      setError(toUserMessage(error));
       setSaving(false);
     } else {
       router.push("/dashboard");

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { profileSchema } from "@/lib/schemas";
+import { toUserMessage } from "@/lib/errors";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 
@@ -59,7 +60,7 @@ export default function OnboardingPage() {
       .eq("id", user.id);
 
     if (dbError) {
-      setError(dbError.message.includes("unique") ? "このIDはすでに使われています" : dbError.message);
+      setError(toUserMessage(dbError));
       setSaving(false);
       return;
     }

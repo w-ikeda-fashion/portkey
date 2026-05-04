@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { achievementSchema } from "@/lib/schemas";
+import { toUserMessage } from "@/lib/errors";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
 
@@ -27,10 +28,16 @@ export default function EditAchievementPage() {
   useEffect(() => {
     async function load() {
       const supabase = createClient();
+
+      // ownerチェック：自分のachievementだけ取得（IDOR対策）
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { router.push("/auth"); return; }
+
       const { data } = await supabase
         .from("achievements")
         .select("*")
         .eq("id", id)
+        .eq("user_id", user.id)   // 他人のIDを指定しても取得不可
         .single();
 
       if (!data) { router.push("/dashboard"); return; }
@@ -73,13 +80,17 @@ export default function EditAchievementPage() {
     setError("");
 
     const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { router.push("/auth"); return; }
+
     const { error } = await supabase
       .from("achievements")
       .update(result.data)
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", user.id);  // 二重防御（RLS + アプリ層）
 
     if (error) {
-      setError(error.message);
+      setError(toUserMessage(error));
       setSaving(false);
     } else {
       router.push("/dashboard");
@@ -92,7 +103,12 @@ export default function EditAchievementPage() {
     setDeleting(true);
 
     const supabase = createClient();
-    await supabase.from("achievements").delete().eq("id", id);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { router.push("/auth"); return; }
+
+    await supabase.from("achievements").delete()
+      .eq("id", id)
+      .eq("user_id", user.id);  // 二重防御（RLS + アプリ層）
     router.push("/dashboard");
     router.refresh();
   }
