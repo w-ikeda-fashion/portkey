@@ -1,6 +1,19 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import type { Provider } from "@/lib/schemas";
+
+type UsageLog = {
+  provider: Provider;
+  date: string;
+  tokens_input: number;
+  tokens_output: number;
+};
+
+type ApiKeyRow = {
+  provider: Provider;
+  last_synced_at: string | null;
+};
 
 // AI tool cost estimates (USD per 1M tokens, rough averages)
 const TOOL_COST_HINT: Record<string, string> = {
@@ -23,10 +36,23 @@ export default async function InsightsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth");
 
-  const { data: raw } = await supabase
-    .from("achievements")
-    .select("ai_tools, category, created_at")
-    .eq("user_id", user.id);
+  const [{ data: raw }, { data: usageRaw }, { data: apiKeyRaw }] = await Promise.all([
+    supabase.from("achievements").select("ai_tools, category, created_at").eq("user_id", user.id),
+    supabase.from("usage_logs").select("provider, date, tokens_input, tokens_output").eq("user_id", user.id).order("date", { ascending: false }).limit(90),
+    supabase.from("api_keys").select("provider, last_synced_at").eq("user_id", user.id),
+  ]);
+
+  const usageLogs = (usageRaw ?? []) as UsageLog[];
+  const apiKeys = (apiKeyRaw ?? []) as ApiKeyRow[];
+
+  // Aggregate tokens per provider
+  const tokensByProvider: Record<string, { input: number; output: number }> = {};
+  for (const log of usageLogs) {
+    if (!tokensByProvider[log.provider]) tokensByProvider[log.provider] = { input: 0, output: 0 };
+    tokensByProvider[log.provider].input += log.tokens_input;
+    tokensByProvider[log.provider].output += log.tokens_output;
+  }
+  const hasUsageData = usageLogs.length > 0;
 
   const achievements = (raw ?? []) as { ai_tools: string[]; category: string; created_at: string }[];
 
@@ -167,50 +193,79 @@ export default async function InsightsPage() {
             </section>
           )}
 
-          {/* トークン使用量（プレースホルダー） */}
+          {/* トークン使用量 */}
           <section
             className="p-5 rounded-lg border"
             style={{ background: "var(--card)", borderColor: "var(--border)" }}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold">トークン使用量・コスト試算</h2>
-              <span
+              <h2 className="text-sm font-semibold">トークン使用量（直近90日）</h2>
+              <Link
+                href="/dashboard/settings/api-keys"
                 className="text-xs px-2 py-0.5 rounded-full"
-                style={{ background: "#0f2e1a", color: "#86efac" }}
+                style={{ background: "var(--accent)22", color: "var(--accent)" }}
               >
-                API連携で解放
-              </span>
+                連携設定 →
+              </Link>
             </div>
-            <div className="flex flex-col gap-3 mb-4">
-              {sortedTools.slice(0, 4).map(([tool]) => (
-                <div key={tool} className="flex items-center justify-between">
-                  <span className="text-sm">{tool}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs" style={{ color: "var(--muted)" }}>
-                      {TOOL_COST_HINT[tool] ?? "—"}
-                    </span>
-                    <span
-                      className="text-xs px-2 py-0.5 rounded"
-                      style={{ background: "var(--border)", color: "var(--muted)" }}
-                    >
-                      — トークン
-                    </span>
-                  </div>
+
+            {hasUsageData ? (
+              <div className="flex flex-col gap-3">
+                {Object.entries(tokensByProvider).map(([provider, { input, output }]) => {
+                  const total = input + output;
+                  const providerLabel = provider === "openai" ? "OpenAI" : provider === "anthropic" ? "Anthropic" : "Google";
+                  const synced = apiKeys.find((k) => k.provider === provider)?.last_synced_at;
+                  return (
+                    <div key={provider}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium">{providerLabel}</span>
+                        <span className="text-xs" style={{ color: "var(--muted)" }}>
+                          {total.toLocaleString()} トークン
+                        </span>
+                      </div>
+                      <div className="flex gap-4 text-xs" style={{ color: "var(--muted)" }}>
+                        <span>入力: {input.toLocaleString()}</span>
+                        <span>出力: {output.toLocaleString()}</span>
+                        {synced && <span>同期: {new Date(synced).toLocaleDateString("ja-JP")}</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col gap-3 mb-4">
+                  {sortedTools.slice(0, 4).map(([tool]) => (
+                    <div key={tool} className="flex items-center justify-between">
+                      <span className="text-sm">{tool}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs" style={{ color: "var(--muted)" }}>
+                          {TOOL_COST_HINT[tool] ?? "—"}
+                        </span>
+                        <span
+                          className="text-xs px-2 py-0.5 rounded"
+                          style={{ background: "var(--border)", color: "var(--muted)" }}
+                        >
+                          — トークン
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div
-              className="flex items-start gap-3 p-3 rounded-md"
-              style={{ background: "var(--background)" }}
-            >
-              <span className="text-sm">💡</span>
-              <p className="text-xs" style={{ color: "var(--muted)" }}>
-                APIキーを登録するとツールごとの実際のトークン使用量とコスト換算が表示されます。
-                <Link href="/dashboard/profile" className="ml-1" style={{ color: "var(--accent)" }}>
-                  APIキー設定 →
-                </Link>
-              </p>
-            </div>
+                <div
+                  className="flex items-start gap-3 p-3 rounded-md"
+                  style={{ background: "var(--background)" }}
+                >
+                  <span className="text-sm">💡</span>
+                  <p className="text-xs" style={{ color: "var(--muted)" }}>
+                    APIキーを登録するかChatGPT履歴をインポートすると実際のトークン使用量が表示されます。
+                    <Link href="/dashboard/settings/api-keys" className="ml-1" style={{ color: "var(--accent)" }}>
+                      AI連携設定 →
+                    </Link>
+                  </p>
+                </div>
+              </>
+            )}
           </section>
         </>
       )}

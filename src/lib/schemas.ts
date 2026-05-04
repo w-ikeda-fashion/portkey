@@ -29,3 +29,14 @@ export const profileSchema = z.object({
 
 export type AchievementInput = z.infer<typeof achievementSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
+
+const PROVIDERS = ["openai", "anthropic", "google"] as const;
+export type Provider = (typeof PROVIDERS)[number];
+
+export const apiKeySchema = z.object({
+  provider: z.enum(PROVIDERS),
+  api_key: z.string().min(10, "APIキーが短すぎます"),
+  sync_tokens: z.boolean().default(true),
+});
+
+export type ApiKeyInput = z.infer<typeof apiKeySchema>;
