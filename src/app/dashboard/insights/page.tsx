@@ -37,7 +37,7 @@ export default async function InsightsPage() {
   if (!user) redirect("/auth");
 
   const [{ data: raw }, { data: usageRaw }, { data: apiKeyRaw }] = await Promise.all([
-    supabase.from("achievements").select("ai_tools, category, created_at").eq("user_id", user.id),
+    supabase.from("achievements").select("ai_tools, category, domain, created_at").eq("user_id", user.id),
     supabase.from("usage_logs").select("provider, date, tokens_input, tokens_output").eq("user_id", user.id).order("date", { ascending: false }).limit(90),
     supabase.from("api_keys").select("provider, last_synced_at").eq("user_id", user.id),
   ]);
@@ -54,7 +54,22 @@ export default async function InsightsPage() {
   }
   const hasUsageData = usageLogs.length > 0;
 
-  const achievements = (raw ?? []) as { ai_tools: string[]; category: string; created_at: string }[];
+  const achievements = (raw ?? []) as { ai_tools: string[]; category: string; domain: string | null; created_at: string }[];
+
+  // ツール×ジャンル マトリクス
+  const matrixDomains = [...new Set(achievements.map((a) => a.domain).filter(Boolean))] as string[];
+  const matrixTools = [...new Set(achievements.flatMap((a) => a.ai_tools))];
+  // [tool][domain] = count
+  const matrix: Record<string, Record<string, number>> = {};
+  for (const tool of matrixTools) {
+    matrix[tool] = {};
+    for (const d of matrixDomains) {
+      matrix[tool][d] = achievements.filter(
+        (a) => a.ai_tools.includes(tool) && a.domain === d
+      ).length;
+    }
+  }
+  const hasMatrix = matrixDomains.length > 0 && matrixTools.length > 0;
 
   // ツール別使用回数（何件の成果物で使ったか）
   const toolCount: Record<string, number> = {};
@@ -190,6 +205,64 @@ export default async function InsightsPage() {
                   </div>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* ツール×ジャンル マトリクス */}
+          {hasMatrix && (
+            <section
+              className="p-5 rounded-lg border mb-6"
+              style={{ background: "var(--card)", borderColor: "var(--border)" }}
+            >
+              <h2 className="text-sm font-semibold mb-4">ツール × ジャンル</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="text-left pb-2 pr-3 font-medium" style={{ color: "var(--muted)", minWidth: 80 }}>ツール</th>
+                      {matrixDomains.map((d) => (
+                        <th key={d} className="pb-2 px-2 font-medium text-center" style={{ color: "var(--muted)", minWidth: 64 }}>{d}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {matrixTools.map((tool) => {
+                      const row = matrix[tool];
+                      const maxVal = Math.max(...Object.values(row), 1);
+                      return (
+                        <tr key={tool} className="border-t" style={{ borderColor: "var(--border)" }}>
+                          <td className="py-2 pr-3 font-medium" style={{ color: "var(--foreground)" }}>{tool}</td>
+                          {matrixDomains.map((d) => {
+                            const val = row[d] ?? 0;
+                            const intensity = val / maxVal;
+                            return (
+                              <td key={d} className="py-2 px-2 text-center">
+                                {val > 0 ? (
+                                  <span
+                                    className="inline-flex items-center justify-center w-7 h-7 rounded-md text-xs font-semibold"
+                                    style={{
+                                      background: `color-mix(in srgb, var(--accent) ${Math.round(intensity * 80 + 20)}%, transparent)`,
+                                      color: intensity > 0.5 ? "#fff" : "var(--accent)",
+                                    }}
+                                  >
+                                    {val}
+                                  </span>
+                                ) : (
+                                  <span style={{ color: "var(--border)" }}>—</span>
+                                )}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs mt-3" style={{ color: "var(--muted)" }}>
+                成果物にジャンルを設定すると表示されます。
+                <Link href="/dashboard/achievements/new" className="ml-1" style={{ color: "var(--accent)" }}>成果物を追加 →</Link>
+              </p>
             </section>
           )}
 

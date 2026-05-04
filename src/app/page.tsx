@@ -74,7 +74,7 @@ export default function LandingPage() {
             }}>
               無料で始める
             </Link>
-            <Link href="/www-ikeda-www" style={{
+            <Link href="/@demo" style={{
               padding: "8px 18px", borderRadius: 6, border: "1px solid var(--border)",
               background: "transparent", color: "var(--text)", fontSize: 14, textDecoration: "none",
             }}>
@@ -236,7 +236,7 @@ export default function LandingPage() {
             <Link href="/auth" style={{ padding: "8px 18px", borderRadius: 6, background: "var(--accent2)", color: "#fff", fontSize: 14, fontWeight: 500, textDecoration: "none" }}>
               無料アカウントを作成
             </Link>
-            <Link href="/www-ikeda-www" style={{ padding: "8px 18px", borderRadius: 6, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", fontSize: 14, textDecoration: "none" }}>
+            <Link href="/@sample" style={{ padding: "8px 18px", borderRadius: 6, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", fontSize: 14, textDecoration: "none" }}>
               公開サンプルを見る
             </Link>
           </div>

@@ -8,12 +8,14 @@ import { achievementSchema } from "@/lib/schemas";
 import { toUserMessage } from "@/lib/errors";
 
 const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Copilot", "Cursor", "Perplexity", "Midjourney", "Stable Diffusion", "Whisper", "v0", "Bolt", "Devin"];
+const DOMAINS = ["エンジニアリング", "デザイン", "マーケティング", "営業", "人事", "経営企画", "ライティング", "データ分析", "カスタマーサポート", "法務"];
 
 export default function NewAchievementPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<"webapp" | "business">("business");
+  const [domain, setDomain] = useState<string>("");
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [outcome, setOutcome] = useState("");
   const [url, setUrl] = useState("");
@@ -33,6 +35,7 @@ export default function NewAchievementPage() {
       title: title.trim(),
       description: description.trim(),
       category,
+      domain: domain || undefined,
       ai_tools: selectedTools,
       outcome: outcome.trim(),
       url: url.trim(),
@@ -118,6 +121,28 @@ export default function NewAchievementPage() {
                 }}
               >
                 {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ジャンル */}
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>ジャンル（任意）</label>
+          <div className="flex flex-wrap gap-2">
+            {DOMAINS.map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setDomain((prev) => prev === d ? "" : d)}
+                className="text-xs px-3 py-1 rounded-full border transition-colors"
+                style={{
+                  background: domain === d ? "var(--accent)" : "transparent",
+                  borderColor: domain === d ? "var(--accent)" : "var(--border)",
+                  color: domain === d ? "#fff" : "var(--muted)",
+                }}
+              >
+                {d}
               </button>
             ))}
           </div>

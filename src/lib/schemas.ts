@@ -8,6 +8,7 @@ export const achievementSchema = z.object({
   title: z.string().min(1, "タイトルは必須です").max(100, "タイトルは100文字以内にしてください"),
   description: z.string().max(500, "概要は500文字以内にしてください"),
   category: z.enum(CATEGORIES),
+  domain: z.enum(DOMAINS).optional(),
   ai_tools: z.array(z.enum(AI_TOOLS)).min(1, "AIツールを1つ以上選んでください"),
   outcome: z.string().max(200, "成果は200文字以内にしてください"),
   url: z.string().max(500).refine(
