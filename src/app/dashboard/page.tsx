@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import OnboardedBanner from "./_components/OnboardedBanner";
 import ReportTeaser from "./_components/ReportTeaser";
+import ViewNotification from "./_components/ViewNotification";
 
 const CATEGORY_LABEL: Record<string, string> = {
   webapp: "Webアプリ",
@@ -47,6 +48,20 @@ export default async function DashboardPage({
   const portfolioUrl = username ? `${APP_URL}/${username}` : null;
   const { onboarded } = await searchParams;
   const justOnboarded = onboarded === "1";
+
+  // 閲覧数を取得
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const [{ count: weeklyCount }, { count: totalCount }] = await Promise.all([
+    supabase
+      .from("portfolio_views")
+      .select("*", { count: "exact", head: true })
+      .eq("viewed_username", username)
+      .gte("viewed_at", sevenDaysAgo),
+    supabase
+      .from("portfolio_views")
+      .select("*", { count: "exact", head: true })
+      .eq("viewed_username", username),
+  ]);
 
   return (
     <div>
@@ -93,6 +108,9 @@ export default async function DashboardPage({
           )}
         </div>
       )}
+
+      {/* 閲覧通知 */}
+      <ViewNotification weeklyCount={weeklyCount ?? 0} totalCount={totalCount ?? 0} />
 
       {/* 週次レポート予告 */}
       <ReportTeaser createdAt={profile?.created_at ?? user.created_at} />

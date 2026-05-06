@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { type Metadata } from "next";
 import ShareButtons from "./ShareButtons";
+import ViewTracker from "./ViewTracker";
 
 const CATEGORY_LABEL: Record<string, string> = {
   webapp: "Webアプリ",
@@ -74,6 +75,7 @@ export default async function PublicProfilePage({ params }: Props) {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+      <ViewTracker username={username} />
       <div className="max-w-3xl mx-auto px-6 py-12">
 
         {/* シェアバー — #31 #42 */}

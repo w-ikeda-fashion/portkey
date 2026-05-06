@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { Provider } from "@/lib/schemas";
+import { getUserPlan } from "@/lib/subscription";
 
 type UsageLog = {
   provider: Provider;
@@ -35,6 +36,25 @@ export default async function InsightsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth");
+
+  const plan = await getUserPlan();
+  if (plan !== "pro") {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <p className="text-2xl font-bold mb-3">Pro プラン限定機能です</p>
+        <p className="text-sm mb-6" style={{ color: "var(--muted)" }}>
+          ツール分析は Pro プランでご利用いただけます。
+        </p>
+        <Link
+          href="/dashboard/settings/billing"
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold"
+          style={{ background: "var(--accent)", color: "#fff" }}
+        >
+          Pro にアップグレード
+        </Link>
+      </div>
+    );
+  }
 
   const [{ data: raw }, { data: usageRaw }, { data: apiKeyRaw }] = await Promise.all([
     supabase.from("achievements").select("ai_tools, category, domain, created_at").eq("user_id", user.id),

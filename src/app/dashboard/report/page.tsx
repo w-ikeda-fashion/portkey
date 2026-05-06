@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import PeriodTabs from "./_PeriodTabs";
+import { getUserPlan } from "@/lib/subscription";
 
 type Period = "week" | "month";
 
@@ -64,6 +66,25 @@ export default async function ReportPage({
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth");
+
+  const plan = await getUserPlan();
+  if (plan !== "pro") {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <p className="text-2xl font-bold mb-3">Pro プラン限定機能です</p>
+        <p className="text-sm mb-6" style={{ color: "var(--muted)" }}>
+          週次・月次レポートは Pro プランでご利用いただけます。
+        </p>
+        <Link
+          href="/dashboard/settings/billing"
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold"
+          style={{ background: "var(--accent)", color: "#fff" }}
+        >
+          Pro にアップグレード
+        </Link>
+      </div>
+    );
+  }
 
   const { period: periodParam } = await searchParams;
   const period: Period = periodParam === "month" ? "month" : "week";

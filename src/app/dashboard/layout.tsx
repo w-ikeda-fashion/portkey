@@ -33,6 +33,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <Link href="/dashboard/profile" className="transition-colors hover:opacity-80">
             プロフィール
           </Link>
+          <Link href="/dashboard/sessions" className="transition-colors hover:opacity-80">
+            セッション
+          </Link>
+          <Link href="/dashboard/settings/billing" className="transition-colors hover:opacity-80">
+            プラン
+          </Link>
           <form action={signOut}>
             <button
               type="submit"

@@ -41,3 +41,15 @@ export const apiKeySchema = z.object({
 });
 
 export type ApiKeyInput = z.infer<typeof apiKeySchema>;
+
+export const sessionLogSchema = z.object({
+  summary: z.string().min(1, "サマリーは必須です").max(2000, "サマリーは2000文字以内にしてください"),
+  model: z.string().min(1, "モデル名は必須です").max(100),
+  tokens_input: z.number().int().min(0).default(0),
+  tokens_output: z.number().int().min(0).default(0),
+  started_at: z.string().datetime({ message: "started_at はISO 8601形式で指定してください" }),
+  ended_at: z.string().datetime({ message: "ended_at はISO 8601形式で指定してください" }),
+  tags: z.array(z.string().max(50)).max(20).default([]),
+});
+
+export type SessionLogInput = z.infer<typeof sessionLogSchema>;
