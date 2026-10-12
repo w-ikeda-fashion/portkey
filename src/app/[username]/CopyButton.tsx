@@ -15,7 +15,7 @@ export default function CopyButton({ url }: { url: string }) {
     <button
       onClick={handleCopy}
       className="text-xs px-3 py-1.5 rounded-md border transition-colors"
-      style={{ borderColor: "var(--border)", color: copied ? "#86efac" : "var(--muted)" }}
+      style={{ borderColor: "var(--border)", color: copied ? "var(--pk-gain-ink)" : "var(--muted)" }}
     >
       {copied ? "✓ コピーしました" : "URLをコピー"}
     </button>

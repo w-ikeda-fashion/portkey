@@ -17,7 +17,7 @@ export default function ReportTeaser({ createdAt }: { createdAt: string }) {
     >
       <div
         className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-        style={{ background: "#0f2e1a" }}
+        style={{ background: "var(--pk-gain-bg)" }}
       >
         📊
       </div>

@@ -93,7 +93,7 @@ export default function ProfilePage() {
       <h1 className="text-xl font-bold mb-6">プロフィール編集</h1>
 
       {error && (
-        <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+        <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
           {error}
         </p>
       )}
@@ -153,7 +153,7 @@ export default function ProfilePage() {
                   style={{
                     background: active ? "var(--accent)" : "transparent",
                     borderColor: active ? "var(--accent)" : "var(--border)",
-                    color: active ? "#fff" : "var(--muted)",
+                    color: active ? "var(--pk-on-accent)" : "var(--muted)",
                   }}
                 >
                   {tool}
@@ -175,9 +175,9 @@ export default function ProfilePage() {
                   onClick={() => toggleItem(domain, selectedDomains, setSelectedDomains)}
                   className="text-xs px-3 py-1 rounded-full border transition-colors"
                   style={{
-                    background: active ? "#0f4c81" : "transparent",
-                    borderColor: active ? "#1d6fbc" : "var(--border)",
-                    color: active ? "#93c5fd" : "var(--muted)",
+                    background: active ? "var(--pk-chip)" : "transparent",
+                    borderColor: active ? "var(--pk-tool-cursor)" : "var(--border)",
+                    color: active ? "var(--pk-tool-cursor)" : "var(--muted)",
                   }}
                 >
                   {domain}
@@ -191,7 +191,7 @@ export default function ProfilePage() {
           type="submit"
           disabled={saving}
           className="mt-2 py-2 rounded-md text-sm font-semibold transition-all disabled:opacity-50"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           {saving ? "保存中..." : "保存する"}
         </button>

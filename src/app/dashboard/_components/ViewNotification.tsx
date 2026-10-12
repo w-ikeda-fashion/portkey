@@ -11,7 +11,7 @@ export default function ViewNotification({ weeklyCount, totalCount }: Props) {
   return (
     <div
       className="p-4 rounded-lg border mb-6"
-      style={{ background: "var(--card)", borderColor: "var(--accent)44" }}
+      style={{ background: "var(--card)", borderColor: "color-mix(in srgb, var(--accent) 27%, transparent)" }}
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -28,7 +28,7 @@ export default function ViewNotification({ weeklyCount, totalCount }: Props) {
               <div
                 key={i}
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold blur-sm select-none"
-                style={{ background: "var(--accent)33", color: "var(--accent)" }}
+                style={{ background: "color-mix(in srgb, var(--accent) 20%, transparent)", color: "var(--accent)" }}
               >
                 {String.fromCharCode(65 + i)}
               </div>
@@ -36,7 +36,7 @@ export default function ViewNotification({ weeklyCount, totalCount }: Props) {
             {weeklyCount > 5 && (
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs blur-sm select-none"
-                style={{ background: "var(--accent)22", color: "var(--muted)" }}
+                style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)", color: "var(--muted)" }}
               >
                 +{weeklyCount - 5}
               </div>
@@ -46,7 +46,7 @@ export default function ViewNotification({ weeklyCount, totalCount }: Props) {
         <Link
           href="#"
           className="text-xs px-3 py-1.5 rounded-md font-medium whitespace-nowrap shrink-0"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           詳細を見る（有料）
         </Link>

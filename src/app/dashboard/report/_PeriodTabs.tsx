@@ -15,7 +15,7 @@ export default function PeriodTabs({ current }: { current: "week" | "month" }) {
           className="px-4 py-1.5 font-medium transition-colors"
           style={{
             background: current === p ? "var(--accent)" : "transparent",
-            color: current === p ? "#fff" : "var(--muted)",
+            color: current === p ? "var(--pk-on-accent)" : "var(--muted)",
           }}
         >
           {p === "week" ? "週次" : "月次"}

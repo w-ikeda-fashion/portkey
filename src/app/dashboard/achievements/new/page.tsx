@@ -85,7 +85,7 @@ export default function NewAchievementPage() {
       </div>
 
       {error && (
-        <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+        <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
           {error}
         </p>
       )}
@@ -93,7 +93,7 @@ export default function NewAchievementPage() {
       <div className="flex flex-col gap-5">
         {/* タイトル */}
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>タイトル <span style={{ color: "#f87171" }}>*</span></label>
+          <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>タイトル <span style={{ color: "var(--pk-danger-ink)" }}>*</span></label>
           <input
             type="text"
             value={title}
@@ -117,7 +117,7 @@ export default function NewAchievementPage() {
                 style={{
                   background: category === val ? "var(--accent)" : "transparent",
                   borderColor: category === val ? "var(--accent)" : "var(--border)",
-                  color: category === val ? "#fff" : "var(--muted)",
+                  color: category === val ? "var(--pk-on-accent)" : "var(--muted)",
                 }}
               >
                 {label}
@@ -139,7 +139,7 @@ export default function NewAchievementPage() {
                 style={{
                   background: domain === d ? "var(--accent)" : "transparent",
                   borderColor: domain === d ? "var(--accent)" : "var(--border)",
-                  color: domain === d ? "#fff" : "var(--muted)",
+                  color: domain === d ? "var(--pk-on-accent)" : "var(--muted)",
                 }}
               >
                 {d}
@@ -163,7 +163,7 @@ export default function NewAchievementPage() {
 
         {/* AIツール */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>使用AIツール <span style={{ color: "#f87171" }}>*</span></label>
+          <label className="text-xs font-medium" style={{ color: "var(--muted)" }}>使用AIツール <span style={{ color: "var(--pk-danger-ink)" }}>*</span></label>
           <div className="flex flex-wrap gap-2">
             {AI_TOOLS.map((tool) => {
               const active = selectedTools.includes(tool);
@@ -176,7 +176,7 @@ export default function NewAchievementPage() {
                   style={{
                     background: active ? "var(--accent)" : "transparent",
                     borderColor: active ? "var(--accent)" : "var(--border)",
-                    color: active ? "#fff" : "var(--muted)",
+                    color: active ? "var(--pk-on-accent)" : "var(--muted)",
                   }}
                 >
                   {tool}
@@ -235,7 +235,7 @@ export default function NewAchievementPage() {
           type="submit"
           disabled={saving}
           className="py-2 rounded-md text-sm font-semibold transition-colors disabled:opacity-50"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           {saving ? "保存中..." : "保存する"}
         </button>

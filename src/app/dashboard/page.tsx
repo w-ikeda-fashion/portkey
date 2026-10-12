@@ -80,7 +80,7 @@ export default async function DashboardPage({
         >
           <div>
             <p className="text-xs font-medium mb-1" style={{ color: "var(--muted)" }}>あなたの公開URL</p>
-            <p className="font-mono text-sm" style={{ color: "var(--accent)" }}>
+            <p className="font-display text-sm" style={{ color: "var(--accent)" }}>
               {portfolioUrl ?? "プロフィールでIDを設定してください"}
             </p>
           </div>
@@ -123,7 +123,7 @@ export default async function DashboardPage({
         <Link
           href="/dashboard/achievements/new"
           className="text-sm px-4 py-2 rounded-md font-medium"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           + 追加
         </Link>
@@ -141,7 +141,7 @@ export default async function DashboardPage({
           >
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-4"
-              style={{ background: "var(--accent)22" }}
+              style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)" }}
             >
               🏆
             </div>
@@ -153,7 +153,7 @@ export default async function DashboardPage({
             <Link
               href="/dashboard/achievements/new"
               className="inline-block text-sm px-6 py-2.5 rounded-md font-semibold"
-              style={{ background: "var(--accent)", color: "#fff" }}
+              style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
             >
               最初の成果物を追加する
             </Link>
@@ -189,7 +189,7 @@ export default async function DashboardPage({
                       {CATEGORY_LABEL[a.category] ?? a.category}
                     </span>
                     {!a.is_public && (
-                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "#1a1a1a", color: "var(--muted)" }}>
+                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "var(--pk-chip)", color: "var(--muted)" }}>
                         非公開
                       </span>
                     )}
@@ -201,7 +201,7 @@ export default async function DashboardPage({
                       <span
                         key={t}
                         className="text-xs px-2 py-0.5 rounded-full"
-                        style={{ background: "var(--accent)22", color: "var(--accent)" }}
+                        style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)", color: "var(--accent)" }}
                       >
                         {t}
                       </span>

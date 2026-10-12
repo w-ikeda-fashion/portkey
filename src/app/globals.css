@@ -1,43 +1,129 @@
 @import "tailwindcss";
 
 :root {
-  --bg:      #0d1117;
-  --bg2:     #161b22;
-  --bg3:     #21262d;
-  --border:  #30363d;
-  --border2: #40464e;
-  --text:    #e6edf3;
-  --text2:   #8b949e;
-  --text3:   #6e7681;
-  --accent:  #3fb950;
-  --accent2: #238636;
-  --blue:    #58a6ff;
-  --purple:  #bc8cff;
-  --orange:  #f0883e;
-  --red:     #f85149;
+  /* ── Portkey design tokens ───────────────────────── */
+  --pk-ground:       #EFE9DF;
+  --pk-surface:      #F8F4ED;
+  --pk-surface-warm: #F1E3CF;
+  --pk-chip:         #E6DDCF;
+  --pk-border:       #E0D6C7;
+  --pk-rule:         #D9CEBE;
+  --pk-ink:          #221C17;
+  --pk-ink-2:        #5A4F45;
+  --pk-ink-3:        #7A6D60;
+  --pk-accent:       #B4552E;
+  --pk-accent-deep:  #6E2C1A;
+  --pk-on-accent:    #FFF8F0;
+  --pk-on-ink:       #F6F1E9;
+  --pk-night:        #2A211B;
+  --pk-night-ink:    #F3ECE2;
+  --pk-night-ink-2:  #CDBFAE;
+  --pk-gain-bg:      #E2E8D6;
+  --pk-gain-ink:     #3E5230;
+  --pk-danger-bg:    #F4DCD3;
+  --pk-danger-ink:   #8E2E1C;
 
-  /* 後方互換 */
-  --background: var(--bg);
-  --foreground:  var(--text);
-  --card:        var(--bg2);
+  /* 草グラフ 5段階（少ない → 多い） */
+  --pk-g0: #E3DACB;
+  --pk-g1: #EBCB9C;
+  --pk-g2: #D9964F;
+  --pk-g3: #B4552E;
+  --pk-g4: #6E2C1A;
+
+  /* ツール別カラー（必ず名前ラベルと併記する） */
+  --pk-tool-claude:     #B4552E;
+  --pk-tool-chatgpt:    #6F8456;
+  --pk-tool-cursor:     #46617E;
+  --pk-tool-midjourney: #8A5A7A;
+  --pk-tool-runway:     #C9A04A;
+  --pk-tool-other:      #9A8C7C;
+
+  /* ── 旧トークン（ダッシュボード等の後方互換） ── */
+  --bg:      var(--pk-ground);
+  --bg2:     var(--pk-surface);
+  --bg3:     var(--pk-chip);
+  --border:  var(--pk-border);
+  --border2: var(--pk-rule);
+  --text:    var(--pk-ink);
+  --text2:   var(--pk-ink-2);
+  --text3:   var(--pk-ink-3);
+  --accent:  var(--pk-accent);
+  --accent2: var(--pk-accent);
+  --blue:    var(--pk-tool-cursor);
+  --purple:  var(--pk-tool-midjourney);
+  --orange:  var(--pk-g2);
+  --red:     var(--pk-danger-ink);
+
+  --background:   var(--bg);
+  --foreground:   var(--text);
+  --card:         var(--bg2);
   --border-color: var(--border);
-  --muted:       var(--text2);
+  --muted:        var(--text2);
 }
 
 @theme inline {
+  --color-pk-ground:       var(--pk-ground);
+  --color-pk-surface:      var(--pk-surface);
+  --color-pk-surface-warm: var(--pk-surface-warm);
+  --color-pk-chip:         var(--pk-chip);
+  --color-pk-border:       var(--pk-border);
+  --color-pk-rule:         var(--pk-rule);
+  --color-pk-ink:          var(--pk-ink);
+  --color-pk-ink-2:        var(--pk-ink-2);
+  --color-pk-ink-3:        var(--pk-ink-3);
+  --color-pk-accent:       var(--pk-accent);
+  --color-pk-accent-deep:  var(--pk-accent-deep);
+  --color-pk-on-accent:    var(--pk-on-accent);
+  --color-pk-on-ink:       var(--pk-on-ink);
+  --color-pk-night:        var(--pk-night);
+  --color-pk-night-ink:    var(--pk-night-ink);
+  --color-pk-night-ink-2:  var(--pk-night-ink-2);
+  --color-pk-gain-bg:      var(--pk-gain-bg);
+  --color-pk-gain-ink:     var(--pk-gain-ink);
+  --color-pk-danger-bg:    var(--pk-danger-bg);
+  --color-pk-danger-ink:   var(--pk-danger-ink);
+  --color-pk-g0: var(--pk-g0);
+  --color-pk-g1: var(--pk-g1);
+  --color-pk-g2: var(--pk-g2);
+  --color-pk-g3: var(--pk-g3);
+  --color-pk-g4: var(--pk-g4);
+
+  /* 旧ユーティリティ名 */
   --color-background: var(--bg);
   --color-foreground: var(--text);
   --color-card:       var(--bg2);
   --color-border:     var(--border);
-  --color-accent:     var(--accent2);
+  --color-accent:     var(--accent);
   --color-muted:      var(--text2);
+
+  --font-sans:    var(--font-zen), -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+  --font-display: var(--font-bricolage), var(--font-zen), sans-serif;
+  /* 等幅フォントは使わない */
+  --font-mono:    var(--font-display);
+
+  --shadow-pk-hero: 0 24px 48px -32px rgba(80, 50, 25, .35);
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'IBM Plex Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--pk-ground);
+  background-image: radial-gradient(rgba(70, 45, 25, .07) 1px, transparent 1px);
+  background-size: 5px 5px;
+  color: var(--pk-ink);
+  font-family: var(--font-sans);
   line-height: 1.6;
 }
 
 * { box-sizing: border-box; }
+
+/* 見出しは文節単位で折り返す（未対応ブラウザでも balance で偏りを抑える） */
+h1, h2, h3 {
+  word-break: auto-phrase;
+  text-wrap: balance;
+}
+
+.pk-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
