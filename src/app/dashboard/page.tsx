@@ -50,6 +50,8 @@ export default async function DashboardPage({
   const justOnboarded = onboarded === "1";
 
   // 閲覧数を取得
+  // サーバーコンポーネントでリクエスト毎に評価されるため問題なし
+  // eslint-disable-next-line react-hooks/purity
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const [{ count: weeklyCount }, { count: totalCount }] = await Promise.all([
     supabase

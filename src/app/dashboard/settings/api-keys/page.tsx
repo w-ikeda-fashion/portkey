@@ -63,6 +63,8 @@ export default function ApiKeysPage() {
     setLoading(false);
   }
 
+  // setState は await 後に呼ばれるため同期的な連鎖レンダーは起きない
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchStatus(); }, []);
 
   function getKey(provider: string) {
