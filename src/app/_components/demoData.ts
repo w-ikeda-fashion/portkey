@@ -53,35 +53,34 @@ export const DEMO_DAYS = demoCalendar();
 export const DEMO_TOTAL = TOTAL;
 export const DEMO_STREAK = STREAK;
 export const DEMO_TOOLS = toToolShares({
-  Claude: 146,
-  ChatGPT: 80,
-  Cursor: 62,
-  Midjourney: 28,
-  Runway: 17,
-  Gemini: 14,
+  Claude: 38,
+  ChatGPT: 22,
+  Cursor: 18,
+  Midjourney: 12,
+  Runway: 10,
 });
 
 export const DEMO_ENTRIES = [
   {
-    date: "2026.03.14",
+    date: "2025-04-14",
     title: "顧客向けレポート自動生成パイプラインの構築",
-    description: "月次レポートをClaudeで自動生成。スプレッドシートを読み込み、インサイト付きのPDFを出力する仕組みを作った。",
+    description: "月次レポートをClaudeで自動生成。スプレッドシートのデータを読み込み、インサイト付きのPDFを出力。",
     tools: ["Claude"],
     tags: ["業務効率化"],
     impact: "週8時間 削減",
   },
   {
-    date: "2026.03.08",
-    title: "Runwayでプロモーション動画を制作",
-    description: "外注なら30万円かかる動画を、Runwayと手持ちの素材で2日で完成。SNSで1.5万回再生された。",
+    date: "2025-04-08",
+    title: "Runwayでプロモーション動画制作 — ゼロ予算",
+    description: "外注では30万円かかるプロモ動画を、Runwayと自前素材で制作。編集含め2日で完成し、SNSで15k再生。",
     tools: ["Runway"],
     tags: ["映像制作"],
-    impact: "30万円 節約",
+    impact: "¥300k 節約",
   },
   {
-    date: "2026.02.27",
-    title: "レガシーコードのリファクタリング",
-    description: "1.2万行のReactコードをCursorで段階的に整理。テストカバレッジを12%から71%に引き上げた。",
+    date: "2025-03-29",
+    title: "React + TypeScript リファクタリング with Cursor",
+    description: "1.2万行のレガシーコードをCursorで段階的にリファクタ。テストカバレッジを12%から71%へ。",
     tools: ["Cursor"],
     tags: ["開発"],
     impact: "カバレッジ 71%",

@@ -22,6 +22,14 @@
   --pk-gain-ink:     #3E5230;
   --pk-danger-bg:    #F4DCD3;
   --pk-danger-ink:   #8E2E1C;
+  --pk-ink-soft:       #4A4038; /* チップ内の文字 */
+  --pk-link:           #8E3B23; /* 本文中のリンク（accent より濃くしてコントラストを確保） */
+  --pk-link-hover:     #5E2414;
+  --pk-chip-soft:      #EDE5D8; /* surface 上のチップ */
+  --pk-border-strong:  #CFC2B0;
+  --pk-border-warm:    #E5CFAE;
+  --pk-night-ink-3:    #A89A89;
+  --pk-night-rule:     #3D322A;
 
   /* 草グラフ 5段階（少ない → 多い） */
   --pk-g0: #E3DACB;
@@ -82,6 +90,14 @@
   --color-pk-gain-ink:     var(--pk-gain-ink);
   --color-pk-danger-bg:    var(--pk-danger-bg);
   --color-pk-danger-ink:   var(--pk-danger-ink);
+  --color-pk-ink-soft:      var(--pk-ink-soft);
+  --color-pk-link:          var(--pk-link);
+  --color-pk-link-hover:    var(--pk-link-hover);
+  --color-pk-chip-soft:     var(--pk-chip-soft);
+  --color-pk-border-strong: var(--pk-border-strong);
+  --color-pk-border-warm:   var(--pk-border-warm);
+  --color-pk-night-ink-3:   var(--pk-night-ink-3);
+  --color-pk-night-rule:    var(--pk-night-rule);
   --color-pk-g0: var(--pk-g0);
   --color-pk-g1: var(--pk-g1);
   --color-pk-g2: var(--pk-g2);

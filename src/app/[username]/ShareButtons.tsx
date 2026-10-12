@@ -20,7 +20,7 @@ export default function ShareButtons({ url, name }: { url: string; name: string 
   return (
     <div className="flex flex-wrap items-center gap-2">
       {/* URLコピーボタン */}
-      <button type="button" onClick={copy} className={buttonClass("secondary", "sm")} aria-live="polite">
+      <button type="button" onClick={copy} className={buttonClass("soft", "sm")} aria-live="polite">
         {copied ? (
           <>
             <svg aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
