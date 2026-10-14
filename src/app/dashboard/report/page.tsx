@@ -78,7 +78,7 @@ export default async function ReportPage({
         <Link
           href="/dashboard/settings/billing"
           className="px-6 py-2.5 rounded-lg text-sm font-semibold"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           Pro にアップグレード
         </Link>
@@ -169,7 +169,7 @@ export default async function ReportPage({
             <p className="text-2xl font-bold mb-1">{value}</p>
             <p
               className="text-xs"
-              style={{ color: diff !== 0 && label.includes(periodLabel + "の成果物") ? (positive ? "var(--accent)" : "#f87171") : "var(--muted)" }}
+              style={{ color: diff !== 0 && label.includes(periodLabel + "の成果物") ? (positive ? "var(--accent)" : "var(--pk-danger-ink)") : "var(--muted)" }}
             >
               {sub}
             </p>
@@ -255,7 +255,7 @@ export default async function ReportPage({
                   <div className="flex-1 h-2 rounded-full" style={{ background: "var(--border)" }}>
                     <div
                       className="h-2 rounded-full"
-                      style={{ width: `${pct}%`, background: key === "webapp" ? "#3b82f6" : "var(--accent)" }}
+                      style={{ width: `${pct}%`, background: key === "webapp" ? "var(--pk-tool-cursor)" : "var(--accent)" }}
                     />
                   </div>
                   <span className="text-xs w-12 text-right" style={{ color: "var(--muted)" }}>{count}件 ({pct}%)</span>

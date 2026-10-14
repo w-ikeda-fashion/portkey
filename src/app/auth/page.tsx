@@ -71,7 +71,7 @@ export default function AuthPage() {
               className="flex-1 py-2 text-sm font-medium transition-colors"
               style={{
                 background: mode === m ? "var(--accent)" : "transparent",
-                color: mode === m ? "#fff" : "var(--muted)",
+                color: mode === m ? "var(--pk-on-accent)" : "var(--muted)",
               }}
             >
               {m === "login" ? "ログイン" : "新規登録"}
@@ -80,12 +80,12 @@ export default function AuthPage() {
         </div>
 
         {error && (
-          <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+          <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
             {error}
           </p>
         )}
         {message && (
-          <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "#0f2e1a", color: "#86efac" }}>
+          <p className="text-xs mb-4 px-3 py-2 rounded-md" style={{ background: "var(--pk-gain-bg)", color: "var(--pk-gain-ink)" }}>
             {message}
           </p>
         )}
@@ -122,7 +122,7 @@ export default function AuthPage() {
             type="submit"
             disabled={loading}
             className="mt-2 py-2 rounded-md text-sm font-semibold transition-colors disabled:opacity-50"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
           >
             {loading ? "処理中..." : mode === "login" ? "ログイン" : "アカウント作成"}
           </button>

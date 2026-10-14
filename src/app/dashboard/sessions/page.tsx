@@ -81,7 +81,7 @@ export default async function SessionsPage() {
           <Link
             href="/dashboard/settings/tokens"
             className="text-xs px-4 py-2 rounded-md font-medium"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
           >
             API トークンを発行する
           </Link>

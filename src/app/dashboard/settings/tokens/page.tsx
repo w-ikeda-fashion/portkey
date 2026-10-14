@@ -27,6 +27,8 @@ export default function TokensPage() {
     setLoading(false);
   }
 
+  // setState は await 後に呼ばれるため同期的な連鎖レンダーは起きない
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchTokens(); }, []);
 
   async function handleCreate() {
@@ -101,33 +103,33 @@ export default function TokensPage() {
             onClick={handleCreate}
             disabled={creating}
             className="px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
           >
             {creating ? "生成中..." : "生成"}
           </button>
         </div>
         {error && (
-          <p className="mt-2 text-xs px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+          <p className="mt-2 text-xs px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
             {error}
           </p>
         )}
 
         {newToken && (
-          <div className="mt-4 p-3 rounded-md border" style={{ background: "#0f2e1a", borderColor: "#166534" }}>
-            <p className="text-xs font-semibold mb-2" style={{ color: "#86efac" }}>
+          <div className="mt-4 p-3 rounded-md border" style={{ background: "var(--pk-gain-bg)", borderColor: "var(--pk-gain-ink)" }}>
+            <p className="text-xs font-semibold mb-2" style={{ color: "var(--pk-gain-ink)" }}>
               トークンを今すぐコピーしてください。再表示できません。
             </p>
             <div className="flex items-center gap-2">
               <code
                 className="flex-1 text-xs break-all px-2 py-1 rounded"
-                style={{ background: "rgba(0,0,0,0.3)", color: "#86efac", fontFamily: "monospace" }}
+                style={{ background: "var(--pk-surface)", color: "var(--pk-gain-ink)", fontFamily: "var(--font-display)" }}
               >
                 {newToken}
               </code>
               <button
                 onClick={handleCopy}
                 className="px-3 py-1.5 rounded-md text-xs font-medium shrink-0"
-                style={{ background: "#166534", color: "#86efac" }}
+                style={{ background: "var(--pk-gain-ink)", color: "var(--pk-gain-bg)" }}
               >
                 {copied ? "コピー済" : "コピー"}
               </button>
@@ -162,7 +164,7 @@ export default function TokensPage() {
                   onClick={() => handleDelete(t.id)}
                   disabled={deleting[t.id]}
                   className="px-3 py-1.5 rounded-md text-xs font-medium disabled:opacity-50"
-                  style={{ background: "transparent", border: "1px solid #f87171", color: "#f87171" }}
+                  style={{ background: "transparent", border: "1px solid var(--pk-danger-ink)", color: "var(--pk-danger-ink)" }}
                 >
                   {deleting[t.id] ? "削除中..." : "削除"}
                 </button>

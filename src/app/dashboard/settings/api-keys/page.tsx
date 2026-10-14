@@ -63,6 +63,8 @@ export default function ApiKeysPage() {
     setLoading(false);
   }
 
+  // setState は await 後に呼ばれるため同期的な連鎖レンダーは起きない
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchStatus(); }, []);
 
   function getKey(provider: string) {
@@ -169,12 +171,12 @@ export default function ApiKeysPage() {
             onClick={handleImport}
             disabled={!importFile || importing}
             className="px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 self-start"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
           >
             {importing ? "インポート中..." : "インポートする"}
           </button>
           {importResult && (
-            <p className="text-xs px-3 py-2 rounded-md" style={{ background: importResult.startsWith("エラー") ? "#3b0f0f" : "#0f2e1a", color: importResult.startsWith("エラー") ? "#fca5a5" : "#86efac" }}>
+            <p className="text-xs px-3 py-2 rounded-md" style={{ background: importResult.startsWith("エラー") ? "var(--pk-danger-bg)" : "var(--pk-gain-bg)", color: importResult.startsWith("エラー") ? "var(--pk-danger-ink)" : "var(--pk-gain-ink)" }}>
               {importResult}
             </p>
           )}
@@ -200,7 +202,7 @@ export default function ApiKeysPage() {
                 {registered && (
                   <span
                     className="text-xs px-2 py-0.5 rounded-full shrink-0 ml-3"
-                    style={{ background: "#0f2e1a", color: "#86efac" }}
+                    style={{ background: "var(--pk-gain-bg)", color: "var(--pk-gain-ink)" }}
                   >
                     連携中
                   </span>
@@ -220,7 +222,7 @@ export default function ApiKeysPage() {
                         onClick={() => handleSync(p.id)}
                         disabled={syncing[p.id]}
                         className="px-3 py-1.5 rounded-md text-xs font-medium disabled:opacity-50"
-                        style={{ background: "var(--accent)", color: "#fff" }}
+                        style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
                       >
                         {syncing[p.id] ? "同期中..." : "今すぐ同期"}
                       </button>
@@ -229,13 +231,13 @@ export default function ApiKeysPage() {
                       onClick={() => handleDelete(p.id)}
                       disabled={deleting[p.id]}
                       className="px-3 py-1.5 rounded-md text-xs font-medium disabled:opacity-50"
-                      style={{ background: "transparent", border: "1px solid #f87171", color: "#f87171" }}
+                      style={{ background: "transparent", border: "1px solid var(--pk-danger-ink)", color: "var(--pk-danger-ink)" }}
                     >
                       {deleting[p.id] ? "削除中..." : "削除"}
                     </button>
                   </div>
                   {err && (
-                    <p className="text-xs px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+                    <p className="text-xs px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
                       {err}
                     </p>
                   )}
@@ -271,13 +273,13 @@ export default function ApiKeysPage() {
                       onClick={() => handleSave(p.id)}
                       disabled={saving[p.id] || !inputKey[p.id]?.trim()}
                       className="px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
-                      style={{ background: "var(--accent)", color: "#fff" }}
+                      style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
                     >
                       {saving[p.id] ? "確認中..." : "登録"}
                     </button>
                   </div>
                   {err && (
-                    <p className="text-xs px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+                    <p className="text-xs px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
                       {err}
                     </p>
                   )}

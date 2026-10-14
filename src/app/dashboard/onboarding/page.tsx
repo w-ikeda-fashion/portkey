@@ -76,7 +76,7 @@ export default function OnboardingPage() {
       <div className="text-center mb-10">
         <div
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4"
-          style={{ background: "var(--accent)22", color: "var(--accent)" }}
+          style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)", color: "var(--accent)" }}
         >
           ようこそ
         </div>
@@ -88,7 +88,7 @@ export default function OnboardingPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         {error && (
-          <p className="text-xs px-3 py-2 rounded-md" style={{ background: "#3b0f0f", color: "#fca5a5" }}>
+          <p className="text-xs px-3 py-2 rounded-md" style={{ background: "var(--pk-danger-bg)", color: "var(--pk-danger-ink)" }}>
             {error}
           </p>
         )}
@@ -114,7 +114,7 @@ export default function OnboardingPage() {
             />
           </div>
           {previewUrl && (
-            <p className="text-xs font-mono" style={{ color: "var(--accent)" }}>
+            <p className="text-xs font-display" style={{ color: "var(--accent)" }}>
               {previewUrl}
             </p>
           )}
@@ -139,7 +139,7 @@ export default function OnboardingPage() {
                   style={{
                     background: active ? "var(--accent)" : "transparent",
                     borderColor: active ? "var(--accent)" : "var(--border)",
-                    color: active ? "#fff" : "var(--muted)",
+                    color: active ? "var(--pk-on-accent)" : "var(--muted)",
                   }}
                 >
                   {tool}
@@ -153,7 +153,7 @@ export default function OnboardingPage() {
           type="submit"
           disabled={saving || !username || selectedTools.length === 0}
           className="py-3 rounded-md text-sm font-semibold transition-colors disabled:opacity-40"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           {saving ? "設定中..." : "ポートフォリオを作成する →"}
         </button>

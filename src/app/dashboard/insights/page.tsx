@@ -48,7 +48,7 @@ export default async function InsightsPage() {
         <Link
           href="/dashboard/settings/billing"
           className="px-6 py-2.5 rounded-lg text-sm font-semibold"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           Pro にアップグレード
         </Link>
@@ -133,7 +133,7 @@ export default async function InsightsPage() {
           <Link
             href="/dashboard/achievements/new"
             className="text-sm px-4 py-2 rounded-md font-medium"
-            style={{ background: "var(--accent)", color: "#fff" }}
+            style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
           >
             成果物を追加する
           </Link>
@@ -152,7 +152,7 @@ export default async function InsightsPage() {
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
                       {i === 0 && (
-                        <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: "var(--accent)33", color: "var(--accent)" }}>
+                        <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: "color-mix(in srgb, var(--accent) 20%, transparent)", color: "var(--accent)" }}>
                           No.1
                         </span>
                       )}
@@ -215,7 +215,7 @@ export default async function InsightsPage() {
                         <span
                           key={t}
                           className="text-xs px-2 py-0.5 rounded-full"
-                          style={{ background: "var(--accent)22", color: "var(--accent)" }}
+                          style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)", color: "var(--accent)" }}
                         >
                           {t}
                         </span>
@@ -262,7 +262,7 @@ export default async function InsightsPage() {
                                     className="inline-flex items-center justify-center w-7 h-7 rounded-md text-xs font-semibold"
                                     style={{
                                       background: `color-mix(in srgb, var(--accent) ${Math.round(intensity * 80 + 20)}%, transparent)`,
-                                      color: intensity > 0.5 ? "#fff" : "var(--accent)",
+                                      color: intensity > 0.5 ? "var(--pk-on-accent)" : "var(--accent)",
                                     }}
                                   >
                                     {val}
@@ -296,7 +296,7 @@ export default async function InsightsPage() {
               <Link
                 href="/dashboard/settings/api-keys"
                 className="text-xs px-2 py-0.5 rounded-full"
-                style={{ background: "var(--accent)22", color: "var(--accent)" }}
+                style={{ background: "color-mix(in srgb, var(--accent) 13%, transparent)", color: "var(--accent)" }}
               >
                 連携設定 →
               </Link>

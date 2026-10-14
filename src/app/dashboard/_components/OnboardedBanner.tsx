@@ -15,7 +15,7 @@ export default function OnboardedBanner({ url }: { url: string }) {
   return (
     <div
       className="rounded-xl border p-6 mb-8 text-center"
-      style={{ background: "var(--accent)11", borderColor: "var(--accent)44" }}
+      style={{ background: "color-mix(in srgb, var(--accent) 7%, transparent)", borderColor: "color-mix(in srgb, var(--accent) 27%, transparent)" }}
     >
       <div className="text-2xl mb-2">🎉</div>
       <h2 className="font-bold text-lg mb-1">ポートフォリオURLが発行されました！</h2>
@@ -26,13 +26,13 @@ export default function OnboardedBanner({ url }: { url: string }) {
         className="flex items-center gap-2 rounded-lg border px-4 py-2.5 mb-4 max-w-sm mx-auto"
         style={{ background: "var(--card)", borderColor: "var(--border)" }}
       >
-        <span className="flex-1 font-mono text-sm text-left truncate" style={{ color: "var(--accent)" }}>
+        <span className="flex-1 font-display text-sm text-left truncate" style={{ color: "var(--accent)" }}>
           {url}
         </span>
         <button
           onClick={copy}
           className="text-xs px-3 py-1 rounded-md shrink-0 transition-colors"
-          style={{ background: "var(--accent)", color: "#fff" }}
+          style={{ background: "var(--accent)", color: "var(--pk-on-accent)" }}
         >
           {copied ? "コピー完了！" : "コピー"}
         </button>

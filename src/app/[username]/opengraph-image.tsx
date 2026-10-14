@@ -1,17 +1,11 @@
 import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
+import { pk } from "@/lib/design-tokens";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Portkey — AI活用実績ポートフォリオ";
 
-const BG = "#0d1117";
-const BG2 = "#161b22";
-const BORDER = "#30363d";
-const TEXT = "#e6edf3";
-const MUTED = "#8b949e";
-const ACCENT = "#3fb950";
-const ACCENT_DIM = "#0f3d1a";
 
 export default async function Image({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
@@ -43,7 +37,7 @@ export default async function Image({ params }: { params: Promise<{ username: st
         style={{
           width: "100%",
           height: "100%",
-          background: BG,
+          background: pk.ground,
           display: "flex",
           flexDirection: "column",
           padding: "56px 64px",
@@ -51,49 +45,25 @@ export default async function Image({ params }: { params: Promise<{ username: st
           fontFamily: "sans-serif",
         }}
       >
-        {/* 背景装飾 */}
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            width: "480px",
-            height: "100%",
-            background: `linear-gradient(135deg, transparent 40%, ${ACCENT_DIM}44 100%)`,
-            display: "flex",
-          }}
-        />
-
         {/* Portkey ロゴ */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              background: ACCENT,
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              fontSize: "20px",
-              fontWeight: 700,
-            }}
-          >
-            P
+          <div style={{ display: "flex", flexWrap: "wrap", width: "30px", gap: "4px" }}>
+            {pk.g.slice(1).map((c) => (
+              <div key={c} style={{ width: "13px", height: "13px", borderRadius: "4px", background: c, display: "flex" }} />
+            ))}
           </div>
-          <span style={{ color: TEXT, fontSize: "22px", fontWeight: 700, letterSpacing: "0.02em" }}>
-            Portkey
+          <span style={{ color: pk.ink, fontSize: "22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
+            portkey
           </span>
         </div>
 
         {/* メインコンテンツ */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "52px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <span style={{ color: TEXT, fontSize: "56px", fontWeight: 700, lineHeight: 1.1 }}>
+            <span style={{ color: pk.ink, fontSize: "56px", fontWeight: 700, lineHeight: 1.1 }}>
               {name.length > 18 ? name.slice(0, 18) + "…" : name}
             </span>
-            <span style={{ color: MUTED, fontSize: "24px" }}>@{username}</span>
+            <span style={{ color: pk.ink2, fontSize: "24px" }}>@{username}</span>
           </div>
 
           {/* ツールバッジ */}
@@ -103,11 +73,10 @@ export default async function Image({ params }: { params: Promise<{ username: st
                 <div
                   key={tool}
                   style={{
-                    background: ACCENT_DIM,
-                    border: `1px solid ${ACCENT}55`,
+                    background: pk.chip,
                     borderRadius: "999px",
                     padding: "6px 18px",
-                    color: ACCENT,
+                    color: pk.ink2,
                     fontSize: "18px",
                     fontWeight: 500,
                     display: "flex",
@@ -119,11 +88,10 @@ export default async function Image({ params }: { params: Promise<{ username: st
               {tools.length > 5 && (
                 <div
                   style={{
-                    background: BG2,
-                    border: `1px solid ${BORDER}`,
+                    background: pk.chip,
                     borderRadius: "999px",
                     padding: "6px 18px",
-                    color: MUTED,
+                    color: pk.ink2,
                     fontSize: "18px",
                     display: "flex",
                   }}
@@ -136,10 +104,10 @@ export default async function Image({ params }: { params: Promise<{ username: st
 
           {/* 実績カウント */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-            <span style={{ color: ACCENT, fontSize: "64px", fontWeight: 700, lineHeight: 1 }}>
+            <span style={{ color: pk.accent, fontSize: "64px", fontWeight: 700, lineHeight: 1 }}>
               {achievementCount}
             </span>
-            <span style={{ color: MUTED, fontSize: "24px" }}>件のAI活用実績</span>
+            <span style={{ color: pk.ink2, fontSize: "24px" }}>件のAI活用実績</span>
           </div>
         </div>
 
@@ -151,11 +119,11 @@ export default async function Image({ params }: { params: Promise<{ username: st
             justifyContent: "space-between",
             marginTop: "auto",
             paddingTop: "28px",
-            borderTop: `1px solid ${BORDER}`,
+            borderTop: `1px solid ${pk.rule}`,
           }}
         >
-          <span style={{ color: MUTED, fontSize: "18px" }}>AI活用実績ポートフォリオ</span>
-          <span style={{ color: MUTED, fontSize: "18px" }}>portkey-app.vercel.app</span>
+          <span style={{ color: pk.ink2, fontSize: "18px" }}>AI活用実績ポートフォリオ</span>
+          <span style={{ color: pk.ink2, fontSize: "18px" }}>portkey-app.vercel.app</span>
         </div>
       </div>
     ),

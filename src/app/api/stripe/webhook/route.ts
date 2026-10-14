@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
         billing_interval: interval,
         status: subscription.status,
         current_period_end: (() => {
-          const raw = (subscription as any).current_period_end ?? (subscription as any).billing_cycle_anchor;
+          const sub = subscription as unknown as { current_period_end?: number; billing_cycle_anchor?: number };
+          const raw = sub.current_period_end ?? sub.billing_cycle_anchor;
           return raw ? new Date(raw * 1000).toISOString() : null;
         })(),
         updated_at: new Date().toISOString(),
